@@ -1,106 +1,121 @@
+:root {
+    /* --- Tipografías (Google Fonts) --- */
+    --font-main: 'Inter', sans-serif;       
+    --font-accent: 'Poppins', sans-serif;    
+    --font-heading: 'Montserrat', sans-serif; 
+
+    /* --- Colores de Vidrio (Glassmorphism) --- */
+    --glass-bg: rgba(255, 255, 255, 0.1);       /* Transparencia base del vidrio */
+    --glass-border: rgba(255, 255, 255, 0.2);   /* Borde sutil que da sensación de grosor */
+    --glass-blur: blur(12px);                   /* El efecto que desenfoca lo que está detrás */
+    
+    /* --- Colores de Texto --- */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7); 
+    --text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+    /* --- Espaciado y Bordes --- */
+    --radius: 20px;
+    --shadow-main: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* RESET GLOBAL */
 * {
     padding: 0;
     margin: 0;
-    box-sizing: border-box; /* AÑADIDO: Fundamental para que el padding no sume al ancho total */
-    font-family: sans-serif;
+    box-sizing: border-box; /* Hace que el padding no rompa el ancho de los elementos */
+    font-family: var(--font-main);
 }
-
-/* Reto para vos: Dale un color de fondo o un degradado sutil al BODY 
-   para que el efecto de vidrio se note realmente. Si el fondo es blanco puro, 
-   el "glass" no se apreciará bien.
-*/
 
 body {
-    background: #cff5ff;
-    background: linear-gradient(90deg,rgba(207, 245, 255, 1) 0%, rgba(245, 238, 188, 1) 100%);
+    background: linear-gradient(45deg, #0f0c29, #302b63, #24243e); /* Fondo oscuro para que resalte el vidrio */
+    min-height: 100vh;
+    padding-top: 80px; /* Evita que el contenido se esconda bajo el header fijo */
 }
 
+/* HEADER (La capa que flota) */
 .main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    
-    /* --- AQUÍ EMPIEZA LA MAGIA DEL GLASSMORPHISM --- */
-    
-    /* 1. Fondo semi-transparente (Blanco con 25% de opacidad) */
-    background-color: rgba(255, 255, 255, 0.25);
-    
-    /* 2. El Efecto Esmerilado (Súper importante) */
-    /* Desenfoca el fondo detrás del header */
-    backdrop-filter: blur(10px);
-    /* Soporte para navegadores basados en WebKit (Safari, etc.) */
-    -webkit-backdrop-filter: blur(10px);
-    
-    /* 3. Borde sutil y brillo */
-    /* Reemplazamos tu '1px solid red' por uno blanco semi-transparente */
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    
-    /* 4. Sombra para profundidad */
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* Una sombra azulada muy suave */
-    
-    /* --- FIN DE LA MAGIA --- */
+    position: fixed;    /* Lo mantiene siempre visible al hacer scroll */
+    top: 0;             /* Pegado arriba */
+    left: 0;            /* Pegado a la izquierda */
+    width: 100%;        /* Ocupa todo el ancho de la pantalla */
+    z-index: 1000;      /* Se asegura de estar por encima de todo el contenido */
 
-    /* Mantenemos tus estilos de layout */
-    border-radius: 10px;
-    margin: 10px;
+    /* Efecto Liquid Glass */
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.05) 100%
+    ); /* Gradiente traslúcido que simula reflejos de luz */
     
-    /* OPCIONAL PRO: Hacé el header 'sticky' para que flote sobre el contenido */
-    /* position: sticky; 
-       top: 10px; 
-       z-index: 1000; */
+    backdrop-filter: var(--glass-blur); /* El corazón del efecto: desenfoca el fondo */
+    -webkit-backdrop-filter: var(--glass-blur); /* Compatibilidad para navegadores Safari */
+    
+    border-bottom: 1px solid var(--glass-border); /* Línea divisoria muy fina y elegante */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);     /* Sombra suave para dar profundidad */
 }
 
-/* --- Tus estilos existentes, refinados --- */
-
-.main-header .header-logo {
-    font-size: 1.3rem;
-    color: #333; /* Un color de texto base */
+/* CONTENEDOR (El límite del contenido) */
+.header-container {
+    max-width: 1200px;  /* Ancho máximo para que no se estire demasiado en monitores grandes */
+    margin: 0 auto;     /* Centra el bloque horizontalmente */
+    padding: 0 20px;    /* Espacio interno a los lados para que no toque los bordes en móvil */
+    display: flex;      /* Activa el modo caja flexible */
+    justify-content: space-between; /* Separa Logo, Menú y Botón equitativamente */
+    align-items: center;            /* Centra todos los elementos verticalmente */
+    height: 80px;       /* Define la altura fija del encabezado */
 }
 
-.main-header .header-logo span {
-    font-weight: bold;
-    color: #2563eb; /* Reto: Usá una variable acá */
+/* LOGO */
+.header-logo {
+    font-family: var(--font-heading);
+    font-weight: 800;   /* Letra muy gruesa para impacto */
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    letter-spacing: -1px; /* Junta un poco las letras para un look más moderno */
 }
 
+.header-logo span {
+    color: var(--text-secondary); 
+    font-weight: 400;   /* El nombre es más fino para crear contraste visual */
+}
+
+/* MENÚ DE NAVEGACIÓN */
 .main-header .nav-menu {
-    display: flex;
-    gap: 2rem;
+    display: flex;      /* Pone los elementos de la lista en fila */
+    gap: 30px;          /* Espacio generoso entre cada link */
+    list-style: none;   /* Quita los puntos negros de la lista */
 }
 
-.main-header .nav-menu a {
-    text-decoration: none;
-    color: #333; /* Reto: Usá una variable */
-    display: inline-block;
-    padding: 0.5rem 0.8rem;
-    border-radius: 0.4rem; 
-    transition: all 0.3s ease; /* 'all' captura color y background */
+.nav-menu .btn-1 {
+    padding: 10px 20px;
+    text-decoration: none; /* Quita el subrayado azul por defecto */
+    color: var(--text-secondary);
+    font-family: var(--font-accent);
+    font-size: 0.95rem;
+    transition: 0.3s;      /* Suaviza el cambio de color al pasar el mouse */
 }
 
-/* Efecto Hover sutil sobre el vidrio */
-.main-header .nav-menu a:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Un brillo extra */
-    color: #000;
+.nav-menu .btn-1:hover {
+    color: var(--text-primary);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Resplandor neón suave al pasar el mouse */
 }
 
-.main-header .nav-menu li {
-    list-style: none;
+/* BOTÓN DE CONTACTO */
+.btn-contact-me {
+    background: rgba(255, 255, 255, 0.2); /* Fondo de vidrio un poco más sólido */
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    border-radius: var(--radius); /* Bordes redondeados definidos en :root */
+    cursor: pointer;              /* Cambia el cursor a una mano */
+    font-family: var(--font-heading);
+    font-weight: 600;
+    backdrop-filter: blur(4px);   /* Un desenfoque extra dentro del botón */
+    transition: all 0.3s ease;    /* Animación para el efecto de movimiento */
 }
 
-.main-header .btn-contact-me {
-    border-radius: 0.4rem; 
-    cursor: pointer;
-    padding: 0.6rem 1.2rem;
-    background: none;
-    
-    /* Estilo inicial del botón sobre el vidrio */
-    border: 1px solid #2563eb; /* Reto: Usá una variable */
-    color: #2563eb;
-    transition: all 0.3s ease;
-}
-
-/* Efecto Hover del botón */
-.main-header .btn-contact-me:hover {
-    background-color: #2563eb;
-    color: white;
+.btn-contact-me:hover {
+    background: var(--text-primary); /* Se vuelve blanco sólido */
+    color: #000;                     /* Texto negro para legibilidad */
 }
